@@ -20,6 +20,7 @@
                     <h3>Vue Crud </h3>
                 </div>
                 <a class="btn btn-primary" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Add </a>
+                <div v-if="deleteMessage" class="alert alert-danger mt-4 mb-2">{{ deleteMessage }}</div>
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -37,18 +38,54 @@
                             <td>{{ user.email }}</td>
                             <td>{{ user.created_at }}</td>
                             <td>
-                                <a href="" class="btn btn-primary mr-4">Edit</a>
-                                <a href="" class="btn btn-danger ml-5">Delete</a>
+                                <a @click.prevent="editData(user)" data-bs-toggle="modal"  href="#updateUser" class="btn btn-primary mr-4">Edit</a>
+                                <a @click.prevent="deleteData(user.id)" href="" class="btn btn-danger ml-5">Delete</a>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-        <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2"
+        <div class="modal fade" id="updateUser"  aria-hidden="true" aria-labelledby="exampleModalToggleLabel2"
             tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
     
+                <div class="modal-content">
+                    <form @submit.prevent="updateUser()" >
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalToggleLabel2">Update User</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                  <div v-if="server_failed" class="alert alert-danger">{{ server_failed }}</div>
+                  <div v-if="addmessage" class="alert alert-success">{{ addmessage }}</div>
+                            <div class="form-group mb-3">
+                                <label for="name">Name</label>
+                                <input v-model="updateForm.name" type="text" name="name" placeholder="Name" class="form-control" id="name">
+                                <span class="text-danger mb-2" v-for="err in error" v-show="error">{{ err.name }}</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input v-model="updateForm.email" type="text" name="email" placeholder="email" class="form-control" id="email">
+                                <span class="text-danger mb-2" v-for="err in error" v-show="error">{{ err.email }}</span>
+                          
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input  v-model="updateForm.password" type="password" name="password" placeholder="password" class="form-control"
+                                    id="password">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2"
+            tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <form @submit.prevent="addUser()" action="vue-crud-php/conn.php" method="post">
                         <div class="modal-header">

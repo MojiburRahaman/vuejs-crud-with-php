@@ -38,7 +38,33 @@ if ($action == 'read') {
         $response['error'] = true;
         $response['message'] = 'Data Save Failed';
     }
+} elseif ($action == 'edit') {
+    $id = $_POST['id'];
 
+    $result = $conn->query('SELECT * FROM `users` WHERE id =' . $id);
+    $response['user'] = $result->fetch_assoc();
+} elseif ($action == 'update') {
+    // print_r($_POST);
+    $id = $_POST['id'];
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $password = md5($_POST['password']);
+    $result = $conn->query("UPDATE `users` SET `name`='$name',`email`='$email',`password`='$password' WHERE `id` = '$id'");
+    if ($result) {
+        $response['message'] = 'Data Update Successfully';
+    } else {
+        $response['error'] = true;
+        $response['message'] = 'Data Save Failed';
+    }
+} elseif ($action == 'delete') {
+    $id = $_POST['id'];
+    $result = $conn->query("DELETE FROM `users` WHERE `id` = '$id'");
+    if ($result) {
+        $response['message'] = 'Data Deleted Successfully';
+    } else {
+        $response['error'] = true;
+        $response['message'] = 'Data Save Failed';
+    }
 } else {
     $response = [
         'error' => 'Something wrong',
